@@ -30,9 +30,16 @@ public class BaseEntityListener extends AuditingEntityListener {
     }
 
     @PreUpdate
-    private void onPreUpdate(){
-        this.lastUpdateDateTime=LocalDateTime.now();
-        this.lastUpdateUserId=1L;
+    private void onPreUpdate(BaseEntity baseEntity){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        baseEntity.setLastUpdateDateTime(LocalDateTime.now());
+
+        if(authentication != null && !authentication.getName().equals("anonymousUser")){
+            Object principal = authentication.getPrincipal();
+            baseEntity.setLastUpdateUserId( ((UserPrincipal) principal).getId());
+        }
     }
 
 
