@@ -1,5 +1,6 @@
 package com.cydeo.config;
 
+import com.cydeo.service.SecurityService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,7 +20,13 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
-//    @Bean
+    private final SecurityService securityService;
+
+    public SecurityConfig(SecurityService securityService) {
+        this.securityService = securityService;
+    }
+
+    //    @Bean
 //    public UserDetailsService userDetailsService(PasswordEncoder encoder){
 //
 //        List<UserDetails> userList = new ArrayList<>();
@@ -60,7 +67,8 @@ public class SecurityConfig {
 //                .httpBasic()
                 .formLogin()
                     .loginPage("/login")
-                    .defaultSuccessUrl("/welcome")
+//                    .defaultSuccessUrl("/welcome")
+                    .successHandler()
                     .failureUrl("/login?error=true")
                     .permitAll()
                 .and()
@@ -72,7 +80,7 @@ public class SecurityConfig {
                     .tokenValiditySeconds(120)
                     .key("cydeo")
                     .userDetailsService(securityService)
-                .and
+                .and()
                 .build();
     }
 
