@@ -21,9 +21,11 @@ import java.util.List;
 public class SecurityConfig {
 
     private final SecurityService securityService;
+    private final AuthSuccessHandler authSuccessHandler;
 
-    public SecurityConfig(SecurityService securityService) {
+    public SecurityConfig(SecurityService securityService, AuthSuccessHandler authSuccessHandler) {
         this.securityService = securityService;
+        this.authSuccessHandler = authSuccessHandler;
     }
 
     //    @Bean
@@ -68,7 +70,7 @@ public class SecurityConfig {
                 .formLogin()
                     .loginPage("/login")
 //                    .defaultSuccessUrl("/welcome")
-                    .successHandler()
+                    .successHandler(authSuccessHandler)
                     .failureUrl("/login?error=true")
                     .permitAll()
                 .and()
